@@ -16,6 +16,6 @@ Route::get('/', function () {
 });
 
 // 指定静态页面的路由
-Route::get('/help', 'StaticPagesController@help');
-Route::get('/about', 'StaticPagesController@about');
-Route::get('/', 'StaticPagesController@home');
+Route::get('/help', 'StaticPagesController@help')->name('help');
+Route::get('/about', 'StaticPagesController@about')->name('about');
+Route::get('/', 'StaticPagesController@home')->name('home');

@@ -24,3 +24,8 @@ Route::get('/', 'StaticPagesController@home')->name('home');
 Route::get('/signup', 'UsersController@create')->name('signup');
 
 Route::resource('users', 'UsersController');
+
+// 会话控制
+Route::get('login', 'SessionsController@create')->name('login');
+Route::post('login', 'SessionsController@store')->name('login');
+Route::delete('logout', 'SessionsController@destory')->name('logout');

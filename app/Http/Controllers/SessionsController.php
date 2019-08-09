@@ -8,7 +8,17 @@ use Auth;
 
 class SessionsController extends Controller
 {
+    public function __construct(){
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
+
     public function create(){
+        // 登录用户不允许再进入登录页
+        // if (Auth::user()) {
+        //     return redirect()->route('home');
+        // }
     	return view('sessions.create');
     }
 
@@ -20,7 +30,11 @@ class SessionsController extends Controller
 
     	if (Auth::attempt($yz, $request->has('remember'))) {
     		session()->flash('success', '登录成功，欢迎回来');
-    		return redirect()->route('users.show', [Auth::user()]);
+            $fallback = route('users.show', Auth::user());
+
+            // 可以重定向到用户前一地址页面，fallback为默认转向地址
+            return redirect()->intended($fallback);
+    		//return redirect()->route('users.show', [Auth::user()]);
     	}else{
     		session()->flash('danger', '您输入的邮箱密码不匹配');
     		return redirect()->back()->withInput();

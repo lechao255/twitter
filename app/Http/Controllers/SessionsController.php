@@ -29,12 +29,18 @@ class SessionsController extends Controller
     	]);
 
     	if (Auth::attempt($yz, $request->has('remember'))) {
-    		session()->flash('success', '登录成功，欢迎回来');
-            $fallback = route('users.show', Auth::user());
+            if (Auth::user()->activated) {
+                session()->flash('success', '登录成功，欢迎回来');
+                $fallback = route('users.show', Auth::user());
 
-            // 可以重定向到用户前一地址页面，fallback为默认转向地址
-            return redirect()->intended($fallback);
-    		//return redirect()->route('users.show', [Auth::user()]);
+                // 可以重定向到用户前一地址页面，fallback为默认转向地址
+                return redirect()->intended($fallback);
+                //return redirect()->route('users.show', [Auth::user()]);
+            }else{
+                Auth::logout();
+                session()->flash('warning', '您的账号还未激活，请查看邮箱');
+                return redirect('/');
+            }
     	}else{
     		session()->flash('danger', '您输入的邮箱密码不匹配');
     		return redirect()->back()->withInput();
